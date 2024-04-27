@@ -1,0 +1,673 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GestionMagasinPharmacieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="50" />
+          <Property Name="Prenom" Type="nvarchar" MaxLength="50" />
+          <Property Name="Telephone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Adresse" Type="nvarchar" MaxLength="100" />
+          <Property Name="Ville" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ContacterNous">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomPrenom" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="30" />
+          <Property Name="Telephone" Type="varchar" MaxLength="20" />
+          <Property Name="Message" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Entreprise">
+          <Key>
+            <PropertyRef Name="EntrepriseID" />
+          </Key>
+          <Property Name="EntrepriseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="100" />
+          <Property Name="PersonneContact" Type="nvarchar" MaxLength="100" />
+          <Property Name="Adresse" Type="nvarchar" MaxLength="100" />
+          <Property Name="CoordonneesContact" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateEntree" Type="date" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="StockID" />
+          </Key>
+          <Property Name="StockID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomArticle" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="QuantiteTotale" Type="int" />
+          <Property Name="QuantiteVendue" Type="int" />
+          <Property Name="QuantiteDisponible" Type="int" />
+          <Property Name="PrixTotal" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="PrixUnitaire" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="DateEntree" Type="date" />
+        </EntityType>
+        <EntityType Name="StockIn">
+          <Key>
+            <PropertyRef Name="StockInID" />
+          </Key>
+          <Property Name="StockInID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomArticle" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="QuantiteEntree" Type="int" />
+          <Property Name="PrixUnitaire" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="EntrepriseID" Type="int" />
+          <Property Name="DateExpiration" Type="date" />
+          <Property Name="LieuEntree" Type="nvarchar" MaxLength="100" />
+          <Property Name="DateEntree" Type="date" />
+          <Property Name="StockID" Type="int" />
+        </EntityType>
+        <EntityType Name="Utilisateurs">
+          <Key>
+            <PropertyRef Name="UtilisateurID" />
+          </Key>
+          <Property Name="UtilisateurID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomUtilisateur" Type="nvarchar" MaxLength="50" />
+          <Property Name="MotDePasse" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeUtilisateur" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateInscription" Type="date" />
+        </EntityType>
+        <EntityType Name="Vente">
+          <Key>
+            <PropertyRef Name="VenteID" />
+          </Key>
+          <Property Name="VenteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" />
+          <Property Name="NomArticle" Type="nvarchar" MaxLength="100" />
+          <Property Name="PrixUnitaire" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="QuantiteVendue" Type="int" />
+          <Property Name="PrixTotal" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="DateTransaction" Type="date" />
+          <Property Name="StockID" Type="int" />
+        </EntityType>
+        <Association Name="FK__StockIn__Entrepr__403A8C7D">
+          <End Role="Entreprise" Type="Self.Entreprise" Multiplicity="0..1" />
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entreprise">
+              <PropertyRef Name="EntrepriseID" />
+            </Principal>
+            <Dependent Role="StockIn">
+              <PropertyRef Name="EntrepriseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockIn__StockID__282DF8C2">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="0..1" />
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockID" />
+            </Principal>
+            <Dependent Role="StockIn">
+              <PropertyRef Name="StockID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Vente__ClientID__3C69FB99">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Vente" Type="Self.Vente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="Vente">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vente_Stock">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="0..1" />
+          <End Role="Vente" Type="Self.Vente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockID" />
+            </Principal>
+            <Dependent Role="Vente">
+              <PropertyRef Name="StockID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AjouterClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nom" Type="nvarchar" Mode="In" />
+          <Parameter Name="Prenom" Type="nvarchar" Mode="In" />
+          <Parameter Name="Telephone" Type="nvarchar" Mode="In" />
+          <Parameter Name="Adresse" Type="nvarchar" Mode="In" />
+          <Parameter Name="Ville" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AjouterEntreprise" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nom" Type="nvarchar" Mode="In" />
+          <Parameter Name="PersonneContact" Type="nvarchar" Mode="In" />
+          <Parameter Name="Adresse" Type="nvarchar" Mode="In" />
+          <Parameter Name="CoordonneesContact" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateEntree" Type="date" Mode="In" />
+        </Function>
+        <Function Name="AjouterStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NomArticle" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="QuantiteTotale" Type="int" Mode="In" />
+          <Parameter Name="QuantiteVendue" Type="int" Mode="In" />
+          <Parameter Name="PrixTotal" Type="decimal" Mode="In" />
+          <Parameter Name="PrixUnitaire" Type="decimal" Mode="In" />
+          <Parameter Name="DateEntree" Type="date" Mode="In" />
+        </Function>
+        <Function Name="AjouterStockIn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NomArticle" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="QuantiteEntree" Type="int" Mode="In" />
+          <Parameter Name="PrixUnitaire" Type="decimal" Mode="In" />
+          <Parameter Name="EntrepriseID" Type="int" Mode="In" />
+          <Parameter Name="DateExpiration" Type="date" Mode="In" />
+          <Parameter Name="LieuEntree" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateEntree" Type="date" Mode="In" />
+        </Function>
+        <Function Name="AjouterUtilisateur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NomUtilisateur" Type="nvarchar" Mode="In" />
+          <Parameter Name="MotDePasse" Type="nvarchar" Mode="In" />
+          <Parameter Name="TypeUtilisateur" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateInscription" Type="date" Mode="In" />
+        </Function>
+        <Function Name="InsertVente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientID" Type="int" Mode="In" />
+          <Parameter Name="NomArticle" Type="nvarchar" Mode="In" />
+          <Parameter Name="PrixUnitaire" Type="decimal" Mode="In" />
+          <Parameter Name="QuantiteVendue" Type="int" Mode="In" />
+          <Parameter Name="PrixTotal" Type="decimal" Mode="In" />
+          <Parameter Name="DateTransaction" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="MettreAJourStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StockID" Type="int" Mode="In" />
+          <Parameter Name="QuantiteVendue" Type="int" Mode="In" />
+          <Parameter Name="QuantiteDisponible" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MettreAJourUtilisateur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UtilisateurID" Type="int" Mode="In" />
+          <Parameter Name="NomUtilisateur" Type="nvarchar" Mode="In" />
+          <Parameter Name="MotDePasse" Type="nvarchar" Mode="In" />
+          <Parameter Name="TypeUtilisateur" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SupprimerClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClientID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SupprimerEntreprise" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EntrepriseID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SupprimerStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StockID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SupprimerUtilisateur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UtilisateurID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="GestionMagasinPharmacieModelStoreContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContacterNous" EntityType="Self.ContacterNous" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Entreprise" EntityType="Self.Entreprise" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockIn" EntityType="Self.StockIn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Utilisateurs" EntityType="Self.Utilisateurs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vente" EntityType="Self.Vente" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__StockIn__Entrepr__403A8C7D" Association="Self.FK__StockIn__Entrepr__403A8C7D">
+            <End Role="Entreprise" EntitySet="Entreprise" />
+            <End Role="StockIn" EntitySet="StockIn" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockIn__StockID__282DF8C2" Association="Self.FK__StockIn__StockID__282DF8C2">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="StockIn" EntitySet="StockIn" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Vente__ClientID__3C69FB99" Association="Self.FK__Vente__ClientID__3C69FB99">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Vente" EntitySet="Vente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vente_Stock" Association="Self.FK_Vente_Stock">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="Vente" EntitySet="Vente" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GestionMagasinPharmacieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Prenom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Adresse" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Ville" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Vente" Relationship="Self.FK__Vente__ClientID__3C69FB99" FromRole="Client" ToRole="Vente" />
+        </EntityType>
+        <EntityType Name="Entreprise">
+          <Key>
+            <PropertyRef Name="EntrepriseID" />
+          </Key>
+          <Property Name="EntrepriseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PersonneContact" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Adresse" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CoordonneesContact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateEntree" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="StockIn" Relationship="Self.FK__StockIn__Entrepr__403A8C7D" FromRole="Entreprise" ToRole="StockIn" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="StockID" />
+          </Key>
+          <Property Name="StockID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomArticle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="QuantiteTotale" Type="Int32" />
+          <Property Name="QuantiteVendue" Type="Int32" />
+          <Property Name="QuantiteDisponible" Type="Int32" />
+          <Property Name="PrixTotal" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="PrixUnitaire" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="DateEntree" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="StockIn" Relationship="GestionMagasinPharmacieModel.FK__StockIn__StockID__282DF8C2" FromRole="Stock" ToRole="StockIn" />
+          <NavigationProperty Name="Vente" Relationship="GestionMagasinPharmacieModel.FK_Vente_Stock" FromRole="Stock" ToRole="Vente" />
+        </EntityType>
+        <EntityType Name="StockIn">
+          <Key>
+            <PropertyRef Name="StockInID" />
+          </Key>
+          <Property Name="StockInID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomArticle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="QuantiteEntree" Type="Int32" />
+          <Property Name="PrixUnitaire" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="EntrepriseID" Type="Int32" />
+          <Property Name="DateExpiration" Type="DateTime" Precision="0" />
+          <Property Name="LieuEntree" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DateEntree" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Entreprise" Relationship="Self.FK__StockIn__Entrepr__403A8C7D" FromRole="StockIn" ToRole="Entreprise" />
+          <Property Name="StockID" Type="Int32" />
+          <NavigationProperty Name="Stock" Relationship="GestionMagasinPharmacieModel.FK__StockIn__StockID__282DF8C2" FromRole="StockIn" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Utilisateurs">
+          <Key>
+            <PropertyRef Name="UtilisateurID" />
+          </Key>
+          <Property Name="UtilisateurID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomUtilisateur" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MotDePasse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeUtilisateur" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateInscription" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="Vente">
+          <Key>
+            <PropertyRef Name="VenteID" />
+          </Key>
+          <Property Name="VenteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="NomArticle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PrixUnitaire" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="QuantiteVendue" Type="Int32" />
+          <Property Name="PrixTotal" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="DateTransaction" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Client" Relationship="Self.FK__Vente__ClientID__3C69FB99" FromRole="Vente" ToRole="Client" />
+          <Property Name="StockID" Type="Int32" />
+          <NavigationProperty Name="Stock" Relationship="GestionMagasinPharmacieModel.FK_Vente_Stock" FromRole="Vente" ToRole="Stock" />
+        </EntityType>
+        <Association Name="FK__Vente__ClientID__3C69FB99">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Vente" Type="Self.Vente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="Vente">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockIn__Entrepr__403A8C7D">
+          <End Role="Entreprise" Type="Self.Entreprise" Multiplicity="0..1" />
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entreprise">
+              <PropertyRef Name="EntrepriseID" />
+            </Principal>
+            <Dependent Role="StockIn">
+              <PropertyRef Name="EntrepriseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GestionMagasinPharmacieEntities5" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="Entreprise" EntityType="Self.Entreprise" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" />
+          <EntitySet Name="StockIn" EntityType="Self.StockIn" />
+          <EntitySet Name="Utilisateurs" EntityType="Self.Utilisateurs" />
+          <EntitySet Name="Vente" EntityType="Self.Vente" />
+          <AssociationSet Name="FK__Vente__ClientID__3C69FB99" Association="Self.FK__Vente__ClientID__3C69FB99">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Vente" EntitySet="Vente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockIn__Entrepr__403A8C7D" Association="Self.FK__StockIn__Entrepr__403A8C7D">
+            <End Role="Entreprise" EntitySet="Entreprise" />
+            <End Role="StockIn" EntitySet="StockIn" />
+          </AssociationSet>
+          <FunctionImport Name="AjouterClient">
+            <Parameter Name="Nom" Mode="In" Type="String" />
+            <Parameter Name="Prenom" Mode="In" Type="String" />
+            <Parameter Name="Telephone" Mode="In" Type="String" />
+            <Parameter Name="Adresse" Mode="In" Type="String" />
+            <Parameter Name="Ville" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AjouterEntreprise">
+            <Parameter Name="Nom" Mode="In" Type="String" />
+            <Parameter Name="PersonneContact" Mode="In" Type="String" />
+            <Parameter Name="Adresse" Mode="In" Type="String" />
+            <Parameter Name="CoordonneesContact" Mode="In" Type="String" />
+            <Parameter Name="DateEntree" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="AjouterStock">
+            <Parameter Name="NomArticle" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="QuantiteTotale" Mode="In" Type="Int32" />
+            <Parameter Name="QuantiteVendue" Mode="In" Type="Int32" />
+            <Parameter Name="PrixTotal" Mode="In" Type="Decimal" />
+            <Parameter Name="PrixUnitaire" Mode="In" Type="Decimal" />
+            <Parameter Name="DateEntree" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="AjouterStockIn">
+            <Parameter Name="NomArticle" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="QuantiteEntree" Mode="In" Type="Int32" />
+            <Parameter Name="PrixUnitaire" Mode="In" Type="Decimal" />
+            <Parameter Name="EntrepriseID" Mode="In" Type="Int32" />
+            <Parameter Name="DateExpiration" Mode="In" Type="DateTime" />
+            <Parameter Name="LieuEntree" Mode="In" Type="String" />
+            <Parameter Name="DateEntree" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="AjouterUtilisateur">
+            <Parameter Name="NomUtilisateur" Mode="In" Type="String" />
+            <Parameter Name="MotDePasse" Mode="In" Type="String" />
+            <Parameter Name="TypeUtilisateur" Mode="In" Type="String" />
+            <Parameter Name="DateInscription" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="MettreAJourStock">
+            <Parameter Name="StockID" Mode="In" Type="Int32" />
+            <Parameter Name="QuantiteVendue" Mode="In" Type="Int32" />
+            <Parameter Name="QuantiteDisponible" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MettreAJourUtilisateur">
+            <Parameter Name="UtilisateurID" Mode="In" Type="Int32" />
+            <Parameter Name="NomUtilisateur" Mode="In" Type="String" />
+            <Parameter Name="MotDePasse" Mode="In" Type="String" />
+            <Parameter Name="TypeUtilisateur" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(GestionMagasinPharmacieModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(GestionMagasinPharmacieModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="SupprimerClient">
+          <Parameter Name="ClientID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SupprimerEntreprise">
+          <Parameter Name="EntrepriseID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SupprimerStock">
+          <Parameter Name="StockID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SupprimerUtilisateur">
+          <Parameter Name="UtilisateurID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK__StockIn__StockID__282DF8C2" Association="GestionMagasinPharmacieModel.FK__StockIn__StockID__282DF8C2">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="StockIn" EntitySet="StockIn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vente_Stock" Association="GestionMagasinPharmacieModel.FK_Vente_Stock">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="Vente" EntitySet="Vente" />
+          </AssociationSet>
+          <FunctionImport Name="InsertVente">
+            <Parameter Name="ClientID" Mode="In" Type="Int32" />
+            <Parameter Name="NomArticle" Mode="In" Type="String" />
+            <Parameter Name="PrixUnitaire" Mode="In" Type="Decimal" />
+            <Parameter Name="QuantiteVendue" Mode="In" Type="Int32" />
+            <Parameter Name="PrixTotal" Mode="In" Type="Decimal" />
+            <Parameter Name="DateTransaction" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="ContacterNous" EntityType="GestionMagasinPharmacieModel.ContacterNous" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <Association Name="FK__StockIn__StockID__282DF8C2">
+          <End Type="GestionMagasinPharmacieModel.Stock" Role="Stock" Multiplicity="0..1" />
+          <End Type="GestionMagasinPharmacieModel.StockIn" Role="StockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockID" />
+            </Principal>
+            <Dependent Role="StockIn">
+              <PropertyRef Name="StockID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vente_Stock">
+          <End Type="GestionMagasinPharmacieModel.Stock" Role="Stock" Multiplicity="0..1" />
+          <End Type="GestionMagasinPharmacieModel.Vente" Role="Vente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="StockID" />
+            </Principal>
+            <Dependent Role="Vente">
+              <PropertyRef Name="StockID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ContacterNous">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomPrenom" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GestionMagasinPharmacieModelStoreContainer" CdmEntityContainer="GestionMagasinPharmacieEntities5">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+                <ScalarProperty Name="Ville" ColumnName="Ville" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Client">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="GestionMagasinPharmacieModel.Store.AjouterClient">
+                  <ScalarProperty Name="Ville" ParameterName="Ville" />
+                  <ScalarProperty Name="Adresse" ParameterName="Adresse" />
+                  <ScalarProperty Name="Telephone" ParameterName="Telephone" />
+                  <ScalarProperty Name="Prenom" ParameterName="Prenom" />
+                  <ScalarProperty Name="Nom" ParameterName="Nom" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="GestionMagasinPharmacieModel.Store.SupprimerClient">
+                  <ScalarProperty Name="ClientID" ParameterName="ClientID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Entreprise">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Entreprise">
+              <MappingFragment StoreEntitySet="Entreprise">
+                <ScalarProperty Name="EntrepriseID" ColumnName="EntrepriseID" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="PersonneContact" ColumnName="PersonneContact" />
+                <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+                <ScalarProperty Name="CoordonneesContact" ColumnName="CoordonneesContact" />
+                <ScalarProperty Name="DateEntree" ColumnName="DateEntree" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="StockID" ColumnName="StockID" />
+                <ScalarProperty Name="NomArticle" ColumnName="NomArticle" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="QuantiteTotale" ColumnName="QuantiteTotale" />
+                <ScalarProperty Name="QuantiteVendue" ColumnName="QuantiteVendue" />
+                <ScalarProperty Name="QuantiteDisponible" ColumnName="QuantiteDisponible" />
+                <ScalarProperty Name="PrixTotal" ColumnName="PrixTotal" />
+                <ScalarProperty Name="PrixUnitaire" ColumnName="PrixUnitaire" />
+                <ScalarProperty Name="DateEntree" ColumnName="DateEntree" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockIn">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.StockIn">
+              <MappingFragment StoreEntitySet="StockIn">
+                <ScalarProperty Name="StockID" ColumnName="StockID" />
+                <ScalarProperty Name="StockInID" ColumnName="StockInID" />
+                <ScalarProperty Name="NomArticle" ColumnName="NomArticle" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="QuantiteEntree" ColumnName="QuantiteEntree" />
+                <ScalarProperty Name="PrixUnitaire" ColumnName="PrixUnitaire" />
+                <ScalarProperty Name="EntrepriseID" ColumnName="EntrepriseID" />
+                <ScalarProperty Name="DateExpiration" ColumnName="DateExpiration" />
+                <ScalarProperty Name="LieuEntree" ColumnName="LieuEntree" />
+                <ScalarProperty Name="DateEntree" ColumnName="DateEntree" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Utilisateurs">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Utilisateurs">
+              <MappingFragment StoreEntitySet="Utilisateurs">
+                <ScalarProperty Name="UtilisateurID" ColumnName="UtilisateurID" />
+                <ScalarProperty Name="NomUtilisateur" ColumnName="NomUtilisateur" />
+                <ScalarProperty Name="MotDePasse" ColumnName="MotDePasse" />
+                <ScalarProperty Name="TypeUtilisateur" ColumnName="TypeUtilisateur" />
+                <ScalarProperty Name="DateInscription" ColumnName="DateInscription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vente">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Vente">
+              <MappingFragment StoreEntitySet="Vente">
+                <ScalarProperty Name="StockID" ColumnName="StockID" />
+                <ScalarProperty Name="VenteID" ColumnName="VenteID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="NomArticle" ColumnName="NomArticle" />
+                <ScalarProperty Name="PrixUnitaire" ColumnName="PrixUnitaire" />
+                <ScalarProperty Name="QuantiteVendue" ColumnName="QuantiteVendue" />
+                <ScalarProperty Name="PrixTotal" ColumnName="PrixTotal" />
+                <ScalarProperty Name="DateTransaction" ColumnName="DateTransaction" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.Vente">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="GestionMagasinPharmacieModel.Store.InsertVente">
+                  <ScalarProperty Name="DateTransaction" ParameterName="DateTransaction" />
+                  <ScalarProperty Name="PrixTotal" ParameterName="PrixTotal" />
+                  <ScalarProperty Name="QuantiteVendue" ParameterName="QuantiteVendue" />
+                  <ScalarProperty Name="PrixUnitaire" ParameterName="PrixUnitaire" />
+                  <ScalarProperty Name="NomArticle" ParameterName="NomArticle" />
+                  <ScalarProperty Name="ClientID" ParameterName="ClientID" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AjouterClient" FunctionName="GestionMagasinPharmacieModel.Store.AjouterClient" />
+          <FunctionImportMapping FunctionImportName="AjouterEntreprise" FunctionName="GestionMagasinPharmacieModel.Store.AjouterEntreprise" />
+          <FunctionImportMapping FunctionImportName="AjouterStock" FunctionName="GestionMagasinPharmacieModel.Store.AjouterStock" />
+          <FunctionImportMapping FunctionImportName="AjouterStockIn" FunctionName="GestionMagasinPharmacieModel.Store.AjouterStockIn" />
+          <FunctionImportMapping FunctionImportName="AjouterUtilisateur" FunctionName="GestionMagasinPharmacieModel.Store.AjouterUtilisateur" />
+          <FunctionImportMapping FunctionImportName="MettreAJourStock" FunctionName="GestionMagasinPharmacieModel.Store.MettreAJourStock" />
+          <FunctionImportMapping FunctionImportName="MettreAJourUtilisateur" FunctionName="GestionMagasinPharmacieModel.Store.MettreAJourUtilisateur" />
+          <FunctionImportMapping FunctionImportName="SupprimerClient" FunctionName="GestionMagasinPharmacieModel.Store.SupprimerClient" />
+          <FunctionImportMapping FunctionImportName="SupprimerEntreprise" FunctionName="GestionMagasinPharmacieModel.Store.SupprimerEntreprise" />
+          <FunctionImportMapping FunctionImportName="SupprimerStock" FunctionName="GestionMagasinPharmacieModel.Store.SupprimerStock" />
+          <FunctionImportMapping FunctionImportName="SupprimerUtilisateur" FunctionName="GestionMagasinPharmacieModel.Store.SupprimerUtilisateur" />
+          <FunctionImportMapping FunctionImportName="InsertVente" FunctionName="GestionMagasinPharmacieModel.Store.InsertVente" />
+          <EntitySetMapping Name="ContacterNous">
+            <EntityTypeMapping TypeName="GestionMagasinPharmacieModel.ContacterNous">
+              <MappingFragment StoreEntitySet="ContacterNous">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="NomPrenom" ColumnName="NomPrenom" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

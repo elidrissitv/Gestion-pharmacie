@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="916b9680f3b3473c82a9f958164c392a" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.Client" Width="1.5" PointX="1.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.Entreprise" Width="1.5" PointX="9.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.Stock" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.StockIn" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.Utilisateurs" Width="1.5" PointX="7.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.Vente" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="GestionMagasinPharmacieModel.FK__Vente__ClientID__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="GestionMagasinPharmacieModel.FK__StockIn__Entrepr__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="GestionMagasinPharmacieModel.FK__StockIn__StockID__282DF8C2" />
+        <AssociationConnector Association="GestionMagasinPharmacieModel.FK_Vente_Stock" />
+        <EntityTypeShape EntityType="GestionMagasinPharmacieModel.ContacterNous" Width="1.5" PointX="5.75" PointY="4.375" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
